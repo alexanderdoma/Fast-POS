@@ -25,6 +25,7 @@ a {
 .main {
     width: 100%;
     height: 100vh;
+    overflow: scroll;
 }
 
 header {
@@ -118,3 +119,43 @@ aside div {
         .nav a:hover {
             color: #cccccc;
         }
+
+.contenedor-contenido {
+    
+}
+.contenido {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center
+}
+
+/*Productos*/
+@media(min-width: 768px) {
+    .productos {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+
+.producto {
+    background-color: lightsteelblue;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin: 0 20px 20px 20px;
+}
+
+    .producto a {
+        display: block;
+        background-color: #003d6a;
+        color: #FFF;
+        text-align: center;
+        padding: 1rem;
+        margin: 1rem;
+        font-weight: bold;
+    }
+
+    .gvDatos {
+        margin: 20px;
+    }

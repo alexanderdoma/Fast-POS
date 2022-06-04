@@ -71,6 +71,7 @@
     <Content Include="assets\css\styles.css" />
     <Content Include="assets\js\main.js" />
     <Content Include="default.aspx" />
+    <Content Include="productos.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -81,6 +82,13 @@
     </Compile>
     <Compile Include="default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="productos.aspx.cs">
+      <DependentUpon>productos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="productos.aspx.designer.cs">
+      <DependentUpon>productos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
