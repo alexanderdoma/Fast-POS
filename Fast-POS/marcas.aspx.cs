@@ -1,41 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data.SqlClient;
-using System.Data;
 
 namespace Fast_POS
 {
-    public partial class _default : System.Web.UI.Page
+    public partial class marcas : System.Web.UI.Page
     {
         readonly string strConnection = "Server= DESKTOP-AFFVEDI\\SQLEXPRESS; Database=FastPOS; Integrated Security=true";
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             CargarDatos();
-        }
-
-        protected void FiltrarProductos(object sender, EventArgs e)
-        {
-            using (var conexion = new SqlConnection(strConnection))
-            {
-                conexion.Open();
-                using (var command = new SqlCommand("sp_filtrarProductos", conexion))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@consulta", SqlDbType.NVarChar).Value = txtConsulta.Text;
-                    var ds = new DataSet();
-                    var da = new SqlDataAdapter(command);
-                    da.Fill(ds);
-
-                    gvDatos.DataSource = ds;
-                    gvDatos.DataBind();
-                    rptProductos.DataSource = ds;
-                    rptProductos.DataBind();
-                }
-            }
         }
 
         void CargarDatos()
@@ -43,9 +23,8 @@ namespace Fast_POS
             using (var conexion = new SqlConnection(strConnection))
             {
                 conexion.Open();
-                using (var command = new SqlCommand("sp_listarProductos", conexion))
+                using (var command = new SqlCommand("SELECT id_marca AS Código, nom_marca as Marca FROM marcas", conexion))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
                     var ds = new DataSet();
                     var da = new SqlDataAdapter(command);
                     da.Fill(ds);
@@ -53,11 +32,28 @@ namespace Fast_POS
                     gvDatos.DataSource = ds;
                     gvDatos.DataBind();
 
-                    rptProductos.DataSource = ds;
-                    rptProductos.DataBind();
+                    rptMarcas.DataSource = ds;
+                    rptMarcas.DataBind();
                 }
             }
         }
 
+        protected void FiltrarMarcas(object sender, EventArgs e)
+        {
+            using (var conexion = new SqlConnection(strConnection))
+            {
+                conexion.Open();
+                using (var command = new SqlCommand("select id_marca as Código, nom_marca as Marca FROM marcas WHERE nom_marca LIKE concat('%',@consulta,'%')", conexion))
+                {
+                    command.Parameters.Add("@consulta", SqlDbType.NVarChar).Value = txtConsulta.Text;
+                    var ds = new DataSet();
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(ds);
+
+                        rptMarcas.DataSource = ds;
+                        rptMarcas.DataBind();
+                    }
+            }
+        }
     }
 }

@@ -1,41 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data.SqlClient;
-using System.Data;
 
 namespace Fast_POS
 {
-    public partial class _default : System.Web.UI.Page
+    public partial class usuarios : System.Web.UI.Page
     {
         readonly string strConnection = "Server= DESKTOP-AFFVEDI\\SQLEXPRESS; Database=FastPOS; Integrated Security=true";
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             CargarDatos();
-        }
-
-        protected void FiltrarProductos(object sender, EventArgs e)
-        {
-            using (var conexion = new SqlConnection(strConnection))
-            {
-                conexion.Open();
-                using (var command = new SqlCommand("sp_filtrarProductos", conexion))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@consulta", SqlDbType.NVarChar).Value = txtConsulta.Text;
-                    var ds = new DataSet();
-                    var da = new SqlDataAdapter(command);
-                    da.Fill(ds);
-
-                    gvDatos.DataSource = ds;
-                    gvDatos.DataBind();
-                    rptProductos.DataSource = ds;
-                    rptProductos.DataBind();
-                }
-            }
         }
 
         void CargarDatos()
@@ -43,9 +23,8 @@ namespace Fast_POS
             using (var conexion = new SqlConnection(strConnection))
             {
                 conexion.Open();
-                using (var command = new SqlCommand("sp_listarProductos", conexion))
+                using (var command = new SqlCommand("SELECT id_usuario AS Código, nom_usuario as Nombres, correo_usuario as EMail FROM usuarios", conexion))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
                     var ds = new DataSet();
                     var da = new SqlDataAdapter(command);
                     da.Fill(ds);
@@ -53,11 +32,31 @@ namespace Fast_POS
                     gvDatos.DataSource = ds;
                     gvDatos.DataBind();
 
-                    rptProductos.DataSource = ds;
-                    rptProductos.DataBind();
+                    rptUsuarios.DataSource = ds;
+                    rptUsuarios.DataBind();
                 }
             }
         }
 
+        protected void FiltrarUsuarios(object sender, EventArgs e)
+        {
+            using (var conexion = new SqlConnection(strConnection))
+            {
+                conexion.Open();
+                using (var command = new SqlCommand("SELECT id_usuario AS Código, nom_usuario AS Nombres, correo_usuario AS Email FROM usuarios WHERE nom_usuario LIKE concat('%',@consulta,'%')", conexion))
+                {
+                    command.Parameters.Add("@consulta", SqlDbType.NVarChar).Value = txtConsulta.Text;
+                    var ds = new DataSet();
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(ds);
+
+                    gvDatos.DataSource = ds;
+                    gvDatos.DataBind();
+
+                    rptUsuarios.DataSource = ds;
+                    rptUsuarios.DataBind();
+                }
+            }
+        }
     }
 }
